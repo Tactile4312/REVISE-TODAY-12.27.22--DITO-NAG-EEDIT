@@ -49,7 +49,7 @@ void design(int x, int y) {
 class bms{
     //data encaptulation
     protected: // data hiding
-    char id[20], password[15];
+         char id[20], password[15];
     private:
         int m;
     public: // data abstraction
@@ -168,9 +168,11 @@ class bms{
             gotoxy(44, 13);
             cout<<"[6] . Transaction";
             gotoxy(44, 14);
-            cout<<"[7] . Log Out !!! ";
+            cout<<"[7] . Add Bank Branch";
             gotoxy(44, 15);
-            cout<<"[8] . About US ";
+            cout<<"[8] . Log Out !!! ";
+            gotoxy(44, 16);
+            cout<<"[9] . About US ";
             gotoxy(43, 20);
             cout<<"Please Enter Your Choice [1-8] : ";
             option();
@@ -200,9 +202,12 @@ class bms{
                     transactions();
                     break;
                 case 7:
-                    menuexit();
+                    bankadd();
                     break;
                 case 8:
+                    menuexit();
+                    break;
+                case 9:
                     about();
                     break;
                 default:
@@ -297,6 +302,7 @@ class bms{
         void deposit();
         void withdrawl();
         void transfer();
+        void bankadd();
 
         void menuexit();
         void about(){
@@ -331,6 +337,7 @@ class bms{
         }
 };
 
+//vvvvvvvvvvvvvvvvvvvvvvvvINHERITANCEvvvvvvvvvvvvvvvvvvvvvv
 class record{ //inheritance
     public:
         char name[25];
@@ -348,12 +355,13 @@ class reguser{ //inheritance
         char regusr[25];
         char regpass[25];
 };
-
 class bnkrecord{
     public:
         char bnkname[40];
         int bnkid;
 };
+//^^^^^^^^^^^^^^^^^^^^^^^^^INHERITANCE^^^^^^^^^^^^^^^^^^^^^
+
 void bms:: userlogin(){
     system("cls");
     record rec;
@@ -417,7 +425,7 @@ void bms:: regis(){ // Takes the user-name and password
         cout<<"[2] . Enter Your Account Number : ";
         scanf(" %d", &rec.account);
         gotoxy(36, 10);
-        cout<<"[3] . Enter Your Pin   : ";
+        cout<<"[3] . Enter Your PIN   : ";
         scanf(" %d", &rec.passw);
         gotoxy(36, 11);
         cout<<"[4] . Enter Your Phone Number   : ";
@@ -537,19 +545,22 @@ void bms:: add(){
         cout<<"[2] . Enter Your Account Number : ";
         scanf(" %d", &rec.account);
         gotoxy(36, 10);
-        cout<<"[3] . Enter Your Phone Number   : ";
-        cin>>rec.phone;
+        cout<<"[3] . Enter Your PIN   : ";
+        scanf(" %d", &rec.passw);
         gotoxy(36, 11);
-        cout<<"[4] . Enter Your Address        : ";
-        cin>>rec.address;
+        cout<<"[4] . Enter Your Phone Number   : ";
+        cin>>rec.phone;
         gotoxy(36, 12);
-        cout<<"[5] . Enter Your E-mail         : ";
-        cin>>rec.email;
+        cout<<"[5] . Enter Your Address        : ";
+        cin>>rec.address;
         gotoxy(36, 13);
-        cout<<"[6] . Enter Your Citizenship No.: ";
-        cin>>rec.citiz;
+        cout<<"[6] . Enter Your E-mail         : ";
+        cin>>rec.email;
         gotoxy(36, 14);
-        cout<<"[7] . Enter Amount To Deposit   : $";
+        cout<<"[7] . Enter Your Citizenship No.: ";
+        cin>>rec.citiz;
+        gotoxy(36, 15);
+        cout<<"[8] . Enter Amount To Deposit   : $";
         scanf(" %lf", &rec.blnc);
         srand(time(0)); //random number
         for (r = 0; r < 10; r++) {
@@ -1208,11 +1219,54 @@ re:
     transactions();
 }
 
+void bms:: bankadd(){
+    char c;
+    bnkrecord rec;
+    //app = append binary / write data to the file
+    ofstream f;
+    f.open("recordbank.bin", ios::app | ios::binary); // data will be written at end of the file
+    int i = 0, x;
+    // first we evaluate body and check condition
+    do {
+        system("cls");
+        gotoxy(24, 4);
+        design(20, 177);
+        cout<<" BANK REGISTRATION ";
+        design(20, 177);
+        gotoxy(36, 8);
+        cout<<"[1] . Enter  Name of the Bank        : ";
+        cin>>rec.bnkname;
+        gotoxy(36, 9);
+        cout<<"[2] . Enter Bank ID : ";
+        scanf(" %d", &rec.bnkid);
+        gotoxy(36, 10);
+        //write() = for writing binary data
+        // reinterpret_cast - casting one pointer data type to another pointer data type
+        //This helps to write contents in a class variable in the file and stores it in the variable rec.
+        f.write(reinterpret_cast<char*>(&rec), sizeof(rec)); //whatever &rec is treat it as char *
+        //char is just a byte , //sizeof gets no. of byte it takes to hold whatevery type rec is
+        gotoxy(38, 17);
+        cout<<"CUSTOMER ACCOUNT REGISTRATION SUCCESSFULL";
+        i++;
+        gotoxy(36, 19);
+        cout<<"Do You Want To Add Another Record ? (Y/N) : ";
+        scanf(" %c", &c);
+    } while (c == 'Y' || c == 'y');
+    f.close();
+    gotoxy(40, 22);
+    cout<<"Press any key to return back to main menu. ";
+    char z = getch();
+    if (z == 13) {
+        menu();
+    }
+}
+
 void bms::menuexit(){ //module for logging out of the program.
     system("cls");
         gotoxy(30, 4);
         design(25, 177);
         cout<<" THANK YOU ";
+        design(25, 177);
         time_t t;
         time(&t);
         gotoxy(42, 14);
