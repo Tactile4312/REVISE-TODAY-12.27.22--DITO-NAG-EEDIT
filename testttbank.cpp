@@ -1238,15 +1238,15 @@ void bms:: bankadd(){
         cin>>rec.bnkname;
         gotoxy(36, 9);
         cout<<"[2] . Enter Bank ID : ";
-        scanf(" %d", &rec.bnkid);
+        cin>>rec.bnkid;
         gotoxy(36, 10);
         //write() = for writing binary data
         // reinterpret_cast - casting one pointer data type to another pointer data type
         //This helps to write contents in a class variable in the file and stores it in the variable rec.
         f.write(reinterpret_cast<char*>(&rec), sizeof(rec)); //whatever &rec is treat it as char *
         //char is just a byte , //sizeof gets no. of byte it takes to hold whatevery type rec is
-        gotoxy(38, 17);
-        cout<<"CUSTOMER ACCOUNT REGISTRATION SUCCESSFULL";
+        gotoxy(47, 17);
+        cout<<"BANK ADDED SUCCESSFULL";
         i++;
         gotoxy(36, 19);
         cout<<"Do You Want To Add Another Record ? (Y/N) : ";
