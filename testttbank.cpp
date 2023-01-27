@@ -6,6 +6,7 @@
 #include <time.h>
 #include <fstream>
 #include <cstdio>
+#include <climits>
 
 using namespace std;
 
@@ -303,6 +304,7 @@ class bms{
         void withdrawl();
         void transfer();
         void bankadd();
+        void bnkview();
 
         void menuexit();
         void about(){
@@ -374,7 +376,6 @@ void bms:: userlogin(){
     gotoxy(43, 7);
     cout<<"Enter Your Account Number : ";
     cin>>number;
-    design(25, 177);
     gotoxy(43, 8);
     cout<<"Enter Your Account Password : ";
     scanf("%d", &b);
@@ -382,7 +383,7 @@ void bms:: userlogin(){
         f.open("record.bin", ios::in | ios::binary);
         while (f.read(reinterpret_cast<char*>(&rec),sizeof(rec))) {
             if (rec.passw == b) {
-                transactions();
+                bnkview();
                 getch();
             }
         }
@@ -397,7 +398,7 @@ void bms:: userlogin(){
         gotoxy(52, 15);
         cout<<"Account Doesn't Exist.";
         getch();
-        bms();   
+        userlogin();  
     }
     gotoxy(46, 21);
     cout<<"Press any key to return back to main menu. ";
@@ -1260,6 +1261,41 @@ void bms:: bankadd(){
         menu();
     }
 }
+
+void bms:: bnkview(){
+    system("cls");
+    int input;
+    int i = 6;
+    bnkrecord rec;
+    //read from the file
+    ifstream f;
+    f.open("recordbank.bin", ios::in | ios::binary); //open file for read only
+    gotoxy(24, 1);
+    design(24, 177);
+    cout<<" BANK LIST ";
+    design(24, 177);
+    gotoxy(30, 4);
+    cout<<"Bank Name.";
+    gotoxy(70, 4);
+    cout<<"Bank ID.";
+    while (f.read(reinterpret_cast<char*>(&rec), sizeof(rec))) {
+        gotoxy(30, i);
+        cout<<rec.bnkname;
+        gotoxy(70, i);
+        cout<<rec.bnkid;
+        i++;
+    }
+    f.close();
+    int x;
+    gotoxy(34, i + 5);
+    cout<<"Indicate the Bank Id you want to Transac. ";
+    while (!(cin >> input)) {
+        cin.clear();
+        cin.ignore(INT_MAX, '\n');
+        cout << "Invalid input. Please enter an Bank ID: ";
+    }
+    transactions();
+};
 
 void bms::menuexit(){ //module for logging out of the program.
     system("cls");
