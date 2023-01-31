@@ -2,17 +2,18 @@
 #include <windows.h>
 #include <conio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <fstream>
-#include <cstdio>
-#include <climits>
+#include <string.h> 
+#include <time.h>   //CLOCK_REALTIME 
+#include <fstream>  ///Input/output file stream class
+#include <cstdio>   ///this is for READ AND WRITE THE FILES BYTE
+#include <climits> ///THIS IS FOR BITS VALUEE MAX FUNCTIONS
 
 using namespace std;
 
-int r;
+int r; //random characters
 int chkacc(int a);
 int chkaccreg(int b);
+int chkbnk(int c);
 /*a, which is an integer representing the column number (also known as the x-coordinate) of the desired cursor position
 b, which is an integer representing the row number (also known as the y-coordinate) of the desired cursor position
 The function begins by assigning the values of a and b to the X and Y fields of a COORD struct called coord.
@@ -48,9 +49,8 @@ void design(int x, int y) {
 }
 
 class bms{
-    //data encaptulation
-    protected: // data hiding
-         char id[20], password[15];
+    // data encapsulation
+    char id[20], password[15];
     private:
         int m;
     public: // data abstraction
@@ -171,10 +171,14 @@ class bms{
             gotoxy(44, 14);
             cout<<"[7] . Add Bank Branch";
             gotoxy(44, 15);
-            cout<<"[8] . Log Out !!! ";
+            cout<<"[8] . Delete Bank Branch";
             gotoxy(44, 16);
-            cout<<"[9] . About US ";
-            gotoxy(43, 20);
+            cout<<"[9] . View Bank Branch";
+            gotoxy(44, 17);
+            cout<<"[10] . Log Out !!! ";
+            gotoxy(44, 18);
+            cout<<"[11] . About US ";
+            gotoxy(43, 22);
             cout<<"Please Enter Your Choice [1-8] : ";
             option();
         }
@@ -206,9 +210,15 @@ class bms{
                     bankadd();
                     break;
                 case 8:
-                    menuexit();
+                    delbnk();
                     break;
                 case 9:
+                    bnkview();
+                    break;
+                case 10:
+                    menuexit();
+                    break;
+                case 11:
                     about();
                     break;
                 default:
@@ -260,17 +270,13 @@ class bms{
             cout<<"[3] . Cash Withdrawal";
             gotoxy(49, 12);
             cout<<"[4] . Fund Transfer";
-            if (m == 1) {
-                gotoxy(49, 13);
-                cout<<"[5] . Main Menu";
-            } else {
-                gotoxy(49, 13);
-                cout<<"[5] . Exit";
-            }
+            gotoxy(49, 13);
+            cout<<"[5] . Main Menu";
+            gotoxy(49, 13);
+            cout<<"[5] . Exit";
             gotoxy(45, 17);
             cout<<"Please Enter Your Choice [1-5] : ";
             int a;
-            scanf("%d", &a);
             switch (a) {
                 case 1:
                     system("cls");
@@ -304,7 +310,9 @@ class bms{
         void withdrawl();
         void transfer();
         void bankadd();
+        void bnkviewuser();
         void bnkview();
+        void delbnk();
 
         void menuexit();
         void about(){
@@ -350,12 +358,6 @@ class record{ //inheritance
         char citiz[20];
         double blnc;
         char UserID[10];
-};
-class reguser{ //inheritance
-    public:
-        int accountid;
-        char regusr[25];
-        char regpass[25];
 };
 class bnkrecord{
     public:
@@ -618,6 +620,24 @@ int chkaccreg(int b) {
         //char is just a byte , //sizeof gets no. of byte it takes to hold whatevery type rec is
 
         if (b == rec.passw) {
+            f.close();
+            return 1;
+        }
+    }
+    f.close();
+    return 0;
+}
+
+int chkbnk(int c) {
+    bnkrecord rec;
+    //read binary
+    ifstream f;
+    f.open("recordbank.bin", ios::in | ios::binary);
+    while (!f.eof(  )) {
+        f.read(reinterpret_cast<char*>(&rec),sizeof(rec)); //whatever &rec is treat it as char *
+        //char is just a byte , //sizeof gets no. of byte it takes to hold whatevery type rec is
+
+        if (c == rec.bnkid) {
             f.close();
             return 1;
         }
@@ -1262,7 +1282,7 @@ void bms:: bankadd(){
     }
 }
 
-void bms:: bnkview(){
+void bms:: bnkviewuser(){
     system("cls");
     int input;
     int i = 6;
@@ -1296,6 +1316,92 @@ void bms:: bnkview(){
     }
     transactions();
 };
+
+void bms:: bnkview(){
+    system("cls");
+    int input;
+    int i = 6;
+    bnkrecord rec;
+    //read from the file
+    ifstream f;
+    f.open("recordbank.bin", ios::in | ios::binary); //open file for read only
+    gotoxy(24, 1);
+    design(24, 177);
+    cout<<" BANK LIST ";
+    design(24, 177);
+    gotoxy(30, 4);
+    cout<<"Bank Name.";
+    gotoxy(70, 4);
+    cout<<"Bank ID.";
+    while (f.read(reinterpret_cast<char*>(&rec), sizeof(rec))) {
+        gotoxy(30, i);
+        cout<<rec.bnkname;
+        gotoxy(70, i);
+        cout<<rec.bnkid;
+        i++;
+    }
+    f.close();
+    int x;
+    gotoxy(42, i + 5);
+    cout<<"Press [Enter] to return back to main menu. ";
+    x = getch();
+    if (x == 13) { // 13 = '\r' i.e carriage return
+        menu();
+    } else
+        view();
+};
+
+void bms::delbnk(){
+    bnkrecord rec;
+    ifstream f1;
+    ofstream f2;
+    int b, d, c;
+m:
+    gotoxy(23, 4);
+    design(25, 177);
+    cout<<" DELETE BANK ";
+    design(25, 177);
+    gotoxy(41, 9);
+    cout<<"Enter The Bank ID To Delete : ";
+    scanf("%d", &c);
+    if (chkbnk(c) == 1) {
+        f1.open("recordbank.bin", ios::in | ios::binary);
+        f2.open("newbank.bin", ios::out | ios::binary);
+        while (f1.read(reinterpret_cast<char*>(&rec), sizeof(rec))) {
+            if (rec.bnkid != c)
+                f2.write(reinterpret_cast<char*>(&rec), sizeof(rec));
+        }
+                f1.close();
+        f2.close();
+        ifstream f2;
+        ofstream f1;
+        f1.open("recordbank.bin", ios::out | ios::binary); // write only
+        f2.open("newbank.bin", ios::in | ios::binary);
+        while (f2.read(reinterpret_cast<char*>(&rec), sizeof(rec)))
+            f1.write(reinterpret_cast<char*>(&rec), sizeof(rec));
+        f1.close();
+        f2.close();
+    } else if (chkbnk(c) == 0) {
+        system("CLS");
+        gotoxy(41, 14);
+        design(42, 196);
+        gotoxy(51, 15);
+        cout<<"BANK Doesn't Exist";
+        gotoxy(41, 16);
+        design(42, 196);
+        goto m;
+    }
+    gotoxy(41, 14);
+    design(42, 196);
+    gotoxy(44, 15);
+    cout<<"BANK  DELETED SUCCESSFULLY";
+    gotoxy(41, 16);
+    design(42, 196);
+    gotoxy(42, 18);
+    cout<<"Press any key to return back to main menu. ";
+    getch();
+    menu();
+}
 
 void bms::menuexit(){ //module for logging out of the program.
     system("cls");
