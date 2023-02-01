@@ -1266,7 +1266,7 @@ void bms:: bankadd(){
         cout<<"[1] . Enter  Name of the Bank        : ";
         cin>>rec.bnkname;
         gotoxy(36, 9);
-        cout<<"[2] . Enter Bank ID : ";
+        cout<<"[2] . Enter Bank ID                  : ";
         cin>>rec.bnkid;
         gotoxy(36, 10);
         //write() = for writing binary data
