@@ -178,7 +178,7 @@ class bms{
             gotoxy(44, 18);
             cout<<"[11] . About US ";
             gotoxy(43, 22);
-            cout<<"Please Enter Your Choice [1-8] : ";
+            cout<<"Please Enter Your Choice [1-11] : ";
             option();
         }
 
@@ -560,7 +560,7 @@ void bms:: add(){
         cout<<"[6] . Enter Your E-mail         : ";
         cin>>rec.email;
         gotoxy(36, 14);
-        cout<<"[7] . Enter Your Citizenship No.: ";
+        cout<<"[7] . Enter Your Citizenship    : ";
         cin>>rec.citiz;
         gotoxy(36, 15);
         cout<<"[8] . Enter Amount To Deposit   : $";
