@@ -319,7 +319,7 @@ class bms{
             design(25, 177);
             cout<<" ABOUT US ";
             design(25, 177);
-            gotoxy(14, 9);
+            gotoxy(30, 9);
             cout<<"Bank Management System Project for C++ programming language.";
                     gotoxy(45, 12);
                     cout<<"Members of the group: ";
@@ -428,7 +428,7 @@ void bms:: regis(){ // Takes the user-name and password
         cout<<"[2] . Enter Your Account Number : ";
         scanf(" %d", &rec.account);
         gotoxy(36, 10);
-        cout<<"[3] . Enter Your PIN           2 : ";
+        cout<<"[3] . Enter Your PIN            : ";
         scanf(" %d", &rec.passw);
         gotoxy(36, 11);
         cout<<"[4] . Enter Your Phone Number   : ";
@@ -551,7 +551,7 @@ void bms:: add(){
         cout<<"[2] . Enter Your Account Number : ";
         scanf(" %d", &rec.account);
         gotoxy(36, 10);
-        cout<<"[3] . Enter Your PIN   : ";
+        cout<<"[3] . Enter Your PIN            : ";
         scanf(" %d", &rec.passw);
         gotoxy(36, 11);
         cout<<"[4] . Enter Your Phone Number   : ";
