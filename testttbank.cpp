@@ -215,7 +215,7 @@ class bms{
                     bnkview();
                     break;
                 case 10:
-                    menuexit();
+                    bms();
                     break;
                 case 11:
                     about();
@@ -295,11 +295,8 @@ class bms{
                     transfer();
                     break;
                 case 5:
-                    if (m == 1)
-                        menu();
-                    else
-                        menuexit();
-                        break;
+                    bms();
+                    break;
                 default:
                     transactions();
             }
