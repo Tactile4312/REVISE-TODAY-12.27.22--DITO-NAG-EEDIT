@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h> 
 #include <time.h>   //CLOCK_REALTIME 
-#include <fstream>  ///Input/output file stream class
+#include <fstream>  ///Input/output read file stream class
 #include <cstdio>   ///this is for READ AND WRITE THE FILES BYTE
 #include <climits> ///THIS IS FOR BITS VALUEE MAX FUNCTIONS
 
@@ -101,8 +101,7 @@ class bms{
                 if (m == 1){
                     menu();
                 }
-                else 
-                    transactions();
+                
 
             } else if (verify() == 0) {
                 system("cls");
@@ -257,6 +256,7 @@ class bms{
         void search_name();
 
         void transactions(){ // displays screen for the transaction options and takes the user choice .
+            int a;
             system("CLS");
             gotoxy(25, 4);
             design(25, 177);
@@ -276,7 +276,7 @@ class bms{
             cout<<"[5] . Exit";
             gotoxy(45, 17);
             cout<<"Please Enter Your Choice [1-5] : ";
-            int a;
+            scanf("%d", &a);
             switch (a) {
                 case 1:
                     system("cls");
@@ -313,7 +313,6 @@ class bms{
         void bnkviewuser();
         void bnkview();
         void delbnk();
-
         void menuexit();
         void about(){
             gotoxy(30, 4);
@@ -366,6 +365,7 @@ class bnkrecord{
 };
 //^^^^^^^^^^^^^^^^^^^^^^^^^INHERITANCE^^^^^^^^^^^^^^^^^^^^^
 
+//-------------REA---------------------------//
 void bms:: userlogin(){
     system("cls");
     record rec;
@@ -385,7 +385,7 @@ void bms:: userlogin(){
         f.open("record.bin", ios::in | ios::binary);
         while (f.read(reinterpret_cast<char*>(&rec),sizeof(rec))) {
             if (rec.passw == b) {
-                bnkview();
+                bnkviewuser();
                 getch();
             }
         }
@@ -428,7 +428,7 @@ void bms:: regis(){ // Takes the user-name and password
         cout<<"[2] . Enter Your Account Number : ";
         scanf(" %d", &rec.account);
         gotoxy(36, 10);
-        cout<<"[3] . Enter Your PIN   : ";
+        cout<<"[3] . Enter Your PIN           2 : ";
         scanf(" %d", &rec.passw);
         gotoxy(36, 11);
         cout<<"[4] . Enter Your Phone Number   : ";
@@ -467,6 +467,9 @@ void bms:: regis(){ // Takes the user-name and password
         view();
 }
         
+//-------------REA---------------------------//
+//--------------------FAITH------------------------//
+
 // module for viewing account details
 void bms:: view(){
     int i = 7;
@@ -517,7 +520,7 @@ void bms:: view(){
     }
     f.close();
     int x;
-    gotoxy(42, i + 5);
+    gotoxy(42, i + 2);
     cout<<"Press [Enter] to return back to main menu. ";
     x = getch();
     if (x == 13) { // 13 = '\r' i.e carriage return
@@ -591,13 +594,16 @@ void bms:: add(){
         view();
 }
 
+//--------------------FAITH------------------------//
+
+//-------------REA---------------------------//
 //module to check whether the entered account is in the database or not
 int chkacc(int a) {
     record rec;
     //read binary
     ifstream f;
     f.open("record.bin", ios::in | ios::binary);
-    while (!f.eof(  )) {
+    while (!f.eof(  )) {    //eof means end of file
         f.read(reinterpret_cast<char*>(&rec),sizeof(rec)); //whatever &rec is treat it as char *
         //char is just a byte , //sizeof gets no. of byte it takes to hold whatevery type rec is
 
@@ -615,7 +621,7 @@ int chkaccreg(int b) {
     //read binary
     ifstream f;
     f.open("record.bin", ios::in | ios::binary);
-    while (!f.eof(  )) {
+    while (!f.eof()) {
         f.read(reinterpret_cast<char*>(&rec),sizeof(rec)); //whatever &rec is treat it as char *
         //char is just a byte , //sizeof gets no. of byte it takes to hold whatevery type rec is
 
@@ -645,7 +651,7 @@ int chkbnk(int c) {
     f.close();
     return 0;
 }
-
+//-------------REA---------------------------//
 // module for editing details.
 void bms::edit(){
     record rec;
@@ -742,7 +748,7 @@ re:
             if (rec.account != a)
                 f2.write(reinterpret_cast<char*>(&rec), sizeof(rec));
         }
-                f1.close();
+        f1.close();
         f2.close();
         ifstream f2;
         ofstream f1;
@@ -943,6 +949,7 @@ void bms::search_name() {
         srch();
 }
 
+//---------------------JEZLYN---------------------//
 
 void bms:: chkblnc(){ // module for checking account balance and displaying it
     record rec;
@@ -1058,6 +1065,7 @@ void bms::withdrawl(){ // module to withdraw amount from account
     ofstream f2;
     int a;
     double b, z;
+    z = rec.blnc;
     gotoxy(25, 4);
     design(25, 177);
     cout<<" CASH WITHDRAWAL ";
@@ -1240,6 +1248,9 @@ re:
     transactions();
 }
 
+//---------------------JEZLYN---------------------//
+
+//--------------------FAITH------------------------//
 void bms:: bankadd(){
     char c;
     bnkrecord rec;
@@ -1371,7 +1382,7 @@ m:
             if (rec.bnkid != c)
                 f2.write(reinterpret_cast<char*>(&rec), sizeof(rec));
         }
-                f1.close();
+        f1.close();
         f2.close();
         ifstream f2;
         ofstream f1;
@@ -1402,6 +1413,8 @@ m:
     getch();
     menu();
 }
+
+//--------------------FAITH------------------------//
 
 void bms::menuexit(){ //module for logging out of the program.
     system("cls");
